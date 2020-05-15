@@ -117,7 +117,7 @@ func NewConverter(domain string, enableCommonmark bool, options *Options) *Conve
 
 	// TODO: put domain in options?
 	if options == nil {
-		options = &Options{}
+		options = &Options{PreSanitize: true}
 	}
 	if options.HeadingStyle == "" {
 		options.HeadingStyle = "atx"

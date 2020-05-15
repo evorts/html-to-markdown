@@ -536,7 +536,6 @@ Newlines
 			html: `
 <p>Tes yang ada angkanya ya\n1. Coba pesan urutan\n2. Coba pesan dengan angka\n3. Coba pesan terus</p>\n\n<p>Tes yang ada bulletnya ya\n• Mengurangi kontak fisik\n• Hemat dan Sederhana\n• Mendukung pembayaran nontunai</p>\n
 `,
-			options: &Options{PreSanitize: true},
 		},
 		/*
 			{
