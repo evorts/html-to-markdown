@@ -2,7 +2,7 @@ package md
 
 import (
 	"fmt"
-	"github.com/JohannesKaufmann/html-to-markdown/escape"
+	"github.com/evorts/html-to-markdown/escape"
 	"regexp"
 	"strconv"
 	"strings"
