@@ -88,6 +88,8 @@ func String(text string) *string {
 // Options to customize the output. You can change stuff like
 // the character that is used for strong text.
 type Options struct {
+	PreSanitize bool //sanitise the input before go with the conversion
+
 	// "setext" or "atx"
 	// default: "atx"
 	HeadingStyle string

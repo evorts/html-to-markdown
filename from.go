@@ -321,9 +321,17 @@ func (c *Converter) ConvertResponse(res *http.Response) (string, error) {
 	return c.Convert(doc.Selection), nil
 }
 
+func (c *Converter) Sanitize(html string) string {
+	html = strings.ReplaceAll(html, "\n", "<br/>")
+	return html
+}
+
 // ConvertString returns the content from a html string. If you
 // already have a goquery selection use `Convert`.
 func (c *Converter) ConvertString(html string) (string, error) {
+	if c.options.PreSanitize {
+		html = c.Sanitize(html)
+	}
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(html))
 	if err != nil {
 		return "", err
