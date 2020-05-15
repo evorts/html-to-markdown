@@ -13,15 +13,18 @@ var orderedList = regexp.MustCompile(`(?m)^(\W* {0,3})(\d+)\. `)
 var unorderedList = regexp.MustCompile(`(?m)^([^\\\w]*)[*+-] `)
 var horizontalDivider = regexp.MustCompile(`(?m)^([-*_] *){3,}$`)
 var blockquote = regexp.MustCompile(`(?m)^(\W* {0,3})> `)
-var link = regexp.MustCompile(`[\[\]]`)
 
 var replacer = strings.NewReplacer(
 	`*`, `\*`,
 	`_`, `\_`,
 	"`", "\\`",
+	`|`, `\|`,
 )
 
-func Markdown(text string) string {
+// MarkdownCharacters escapes common markdown characters so that
+// `<p>**Not Bold**</p> ends up as correct markdown `\*\*Not Strong\*\*`.
+// No worry, the escaped characters will display fine, just without the formatting.
+func MarkdownCharacters(text string) string {
 	// Escape backslash escapes!
 	text = backslash.ReplaceAllString(text, `\\$1`)
 
@@ -55,7 +58,9 @@ func Markdown(text string) string {
 	text = replacer.Replace(text)
 
 	// Escape link brackets
-	text = link.ReplaceAllString(text, `\$&`)
+	// 	(disabled)
+	// var link = regexp.MustCompile(`[\[\]]`)
+	// text = link.ReplaceAllString(text, `\$&`)
 
 	return text
 }

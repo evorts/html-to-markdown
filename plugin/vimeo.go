@@ -18,10 +18,6 @@ var netClient = &http.Client{
 	Timeout: Timeout,
 }
 
-// GODEBUG=netdns=go
-// GODEBUG=netdns=cgo
-// -> auto, go, cgo
-
 type vimeoVideo struct {
 	Type                       string `json:"type"`
 	Version                    string `json:"version"`

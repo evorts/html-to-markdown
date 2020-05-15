@@ -5,6 +5,7 @@ import (
 	"flag"
 	"io/ioutil"
 	"path/filepath"
+	"strings"
 	"sync"
 	"testing"
 
@@ -14,27 +15,6 @@ import (
 var update = flag.Bool("update", false, "update .golden files")
 
 func TestFromString(t *testing.T) {
-	/*
-		type rule struct {
-			Before func()
-
-			After func() AdvancedResult
-		}
-
-		type X struct {
-			f func(*X)
-			i int
-		}
-		x := X{
-			f: func(x *X) {
-				x.i = 5
-			},
-		}
-		fmt.Println("before", x.i)
-		x.f(&x)
-		fmt.Println("after", x.i)
-	*/
-
 	var tests = []struct {
 		name string
 
@@ -66,6 +46,14 @@ func TestFromString(t *testing.T) {
 		{
 			name: "strong in p tag with whitespace",
 			html: "<p> Some <strong> Text </strong></p>",
+		},
+		{
+			name: "em in p tag",
+			html: "<p>Some <em>Text</em></p>",
+		},
+		{
+			name: "em in p tag with whitespace",
+			html: "<p> Some <em> Text </em></p>",
 		},
 		{
 			name: "h1",
@@ -279,6 +267,12 @@ Robin  6</code></pre>
 			`,
 		},
 		{
+			name: "code tag",
+			html: `
+			<code>last_30_days</code>
+			`,
+		},
+		{
 			name: "hr",
 			html: `
 			<p>Some Content</p>
@@ -406,6 +400,22 @@ Newlines
 func Fprint(w io.Writer, a ...interface{}) (n int, err error) {</pre></div>
 `,
 		},
+		{
+			name: "escape pipe characters because of the use in tables",
+			html: `<p>With | Character<p>`,
+		},
+		{
+			name: "<br> adds new line break",
+			html: `<p>1. xxx <br/>2. xxxx<br/>3. xxx</p><p><span class="img-wrap"><img src="xxx"></span><br>4. golang<br>a. xx<br>b. xx</p>`,
+		},
+		{
+			name: "<br> does not add new line inside header",
+			html: `<h1>Heading<br/> <br/>One</h1>`,
+		},
+		{
+			name: "dont escape too much",
+			html: `jmap –histo[:live]`,
+		},
 		/*
 					{ // TODO: not working yet
 						name: "p tag with lots of whitespace",
@@ -449,7 +459,7 @@ func Fprint(w io.Writer, a ...interface{}) (n int, err error) {</pre></div>
 			// output := blackfriday.Run(data)
 			// fmt.Println(string(output))
 
-			gp := filepath.Join("testdata", t.Name()+".golden")
+			gp := filepath.Join("testdata", strings.ReplaceAll(t.Name(), ":", "")+".golden")
 			if *update {
 				t.Log("update golden file")
 				if err := ioutil.WriteFile(gp, data, 0644); err != nil {
