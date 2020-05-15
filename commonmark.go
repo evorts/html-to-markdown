@@ -2,12 +2,12 @@ package md
 
 import (
 	"fmt"
+	"github.com/JohannesKaufmann/html-to-markdown/escape"
 	"regexp"
 	"strconv"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
-	"github.com/evorts/html-to-markdown/escape"
 )
 
 var multipleSpacesR = regexp.MustCompile(`  +`)

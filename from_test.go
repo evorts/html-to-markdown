@@ -22,323 +22,454 @@ func TestFromString(t *testing.T) {
 		html    string
 		options *Options
 	}{
-		{
-			name: "p tag",
-			html: `<p>Some Text</p>`,
-		},
-		{
-			name: "two p tags",
-			html: `
-			<div>
-				<p>Text</p>
-				<p>Some Text</p>
-			</div>
-			`,
-		},
-		{
-			name: "span in p tag",
-			html: "<p>Some <span>Text</span></p>",
-		},
-		{
-			name: "strong in p tag",
-			html: "<p>Some <strong>Text</strong></p>",
-		},
-		{
-			name: "strong in p tag with whitespace",
-			html: "<p> Some <strong> Text </strong></p>",
-		},
-		{
-			name: "em in p tag",
-			html: "<p>Some <em>Text</em></p>",
-		},
-		{
-			name: "em in p tag with whitespace",
-			html: "<p> Some <em> Text </em></p>",
-		},
-		{
-			name: "h1",
-			html: "<h1>Header</h1>",
-		},
-		{
-			name: "h2",
-			html: "<h2>Header</h2>",
-		},
-		{
-			name: "h6",
-			html: "<h6>Header</h6>",
-		},
-		{
-			name: "setext h1",
-			html: "<h1>Header</h1>",
-			options: &Options{
-				HeadingStyle: "setext",
-			},
-		},
-		{
-			name: "setext h2",
-			html: "<h2>Header</h2>",
-			options: &Options{
-				HeadingStyle: "setext",
-			},
-		},
-		{
-			name: "setext h3",
-			html: "<h3>Header</h3>",
-			options: &Options{
-				HeadingStyle: "setext",
-			},
-		},
-		{
-			name: "ul",
-			html: `
-			<ul>
-				<li>Some Thing</li>
-				<li>Another Thing</li>
-			</ul>
-			`,
-		},
-		{
-			name: "ol",
-			html: `
-			<ol>
-				<li>First Thing</li>
-				<li>Second Thing</li>
-			</ol>
-			`,
-		},
-		{
-			name: "indent content in li",
-			html: `
-			<ul>
-				<li>
-					Indent First Thing
-					<p>Second Thing</p>
-				</li>
-				<li>Third Thing</li>
-			</ul>
-			`,
-		},
-		{
-			name: "nested list",
-			html: `
-			<ul>
-				<li>foo
-					<ul>
-						<li>bar
+		/*{
+					name: "p tag",
+					html: `<p>Some Text</p>`,
+				},
+				{
+					name: "two p tags",
+					html: `
+					<div>
+						<p>Text</p>
+						<p>Some Text</p>
+					</div>
+					`,
+				},
+				{
+					name: "span in p tag",
+					html: "<p>Some <span>Text</span></p>",
+				},
+				{
+					name: "strong in p tag",
+					html: "<p>Some <strong>Text</strong></p>",
+				},
+				{
+					name: "strong in p tag with whitespace",
+					html: "<p> Some <strong> Text </strong></p>",
+				},
+				{
+					name: "em in p tag",
+					html: "<p>Some <em>Text</em></p>",
+				},
+				{
+					name: "em in p tag with whitespace",
+					html: "<p> Some <em> Text </em></p>",
+				},
+				{
+					name: "h1",
+					html: "<h1>Header</h1>",
+				},
+				{
+					name: "h2",
+					html: "<h2>Header</h2>",
+				},
+				{
+					name: "h6",
+					html: "<h6>Header</h6>",
+				},
+				{
+					name: "setext h1",
+					html: "<h1>Header</h1>",
+					options: &Options{
+						HeadingStyle: "setext",
+					},
+				},
+				{
+					name: "setext h2",
+					html: "<h2>Header</h2>",
 							<ul>
-								<li>baz
+								<li>Some Thing</li>
+								<li>Another Thing</li>
+							</ul>
+							`,
+						},
+						{
+							name: "ol",
+							html: `
+							<ol>
+								<li>First Thing</li>
+								<li>Second Thing</li>
+							</ol>
+							`,
+						},
+						{
+							name: "indent content in li",
+							html: `
+							<ul>
+								<li>
+									Indent First Thing
+									<p>Second Thing</p>
+								</li>
+								<li>Third Thing</li>
+							</ul>
+							`,
+						},
+						{
+							name: "nested list",
+							html: `
+							<ul>
+								<li>foo
 									<ul>
-										<li>boo</li>
+										<li>bar
+											<ul>
+												<li>baz
+													<ul>
+														<li>boo</li>
+													</ul>
+												</li>
+											</ul>
+										</li>
 									</ul>
 								</li>
 							</ul>
+							`,
+						},
+						{
+							name: "ul in ol",
+							html: `
+							<ol>
+								<li>
+									<p>First Thing</p>
+									<ul>
+										<li>Some Thing</li>
+										<li>Another Thing</li>
+									</ul>
+								</li>
+								<li>Second Thing</li>
+							</ol>
+							`,
+						},
+						{
+							name: "empty list item",
+							html: `
+							<ul>
+								<li>foo</li>
+								<li></li>
+								<li>bar</li>
+							</ul>
 						</li>
-					</ul>
-				</li>
-			</ul>
-			`,
-		},
-		{
-			name: "ul in ol",
-			html: `
-			<ol>
-				<li>
-					<p>First Thing</p>
+						<li>Second Thing</li>
+					</ol>
+					`,
+				},
+				{
+					name: "empty list item",
+					html: `
 					<ul>
-						<li>Some Thing</li>
-						<li>Another Thing</li>
+						<li>foo</li>
+						<li></li>
+						<li>bar</li>
 					</ul>
-				</li>
-				<li>Second Thing</li>
-			</ol>
-			`,
-		},
-		{
-			name: "empty list item",
-			html: `
-			<ul>
-				<li>foo</li>
-				<li></li>
-				<li>bar</li>
-			</ul>
-			`,
-		},
-		{
-			name: "list items ending with a space",
-			html: `
-<ul>
-	<li>List items </li>
-	<li>Ending with </li>
-	<li>A space </li>
-</ul>
-			`,
-		},
-		{
-			name: "sup element",
-			html: `
-			<p>One of the most common equations in all of physics is
-			<var>E</var>=<var>m</var><var>c</var><sup>2</sup>.<p>
-			`,
-		},
-		{
-			name: "sup element in list",
-			html: `
-			<p>The ordinal number "fifth" can be abbreviated in various languages as follows:</p>
-			<ul>
-				<li>English: 5<sup>th</sup></li>
-				<li>French: 5<sup>ème</sup></li>
-			</ul>
-			`,
-		},
-		{
-			name: "image",
-			html: `<img alt="website favicon" src="http://commonmark.org/help/images/favicon.png" />`,
-		},
-		{
-			name: "link",
-			html: `<a href="http://commonmark.org/">Link</a>`,
-		},
-		{
-			name: "link with title",
-			html: `<a href="http://commonmark.org/" title="Some Text">Link</a>`,
-		},
-		{
-			name: "reference link: full",
-			html: `
-<a href="http://commonmark.org/first">First Link</a>
+					`,
+				},
+				{
+					name: "list items ending with a space",
+					html: `
+		<ul>
+			<li>List items </li>
+			<li>Ending with </li>
+			<li>A space </li>
+		</ul>
+					`,
+				},
+				{
+					name: "sup element",
+					html: `
+					<p>One of the most common equations in all of physics is
+					<var>E</var>=<var>m</var><var>c</var><sup>2</sup>.<p>
+					`,
+				},
+				{
+					name: "sup element in list",
+					html: `
+					<p>The ordinal number "fifth" can be abbreviated in various languages as follows:</p>
+					<ul>
+						<li>English: 5<sup>th</sup></li>
+						<li>French: 5<sup>ème</sup></li>
+					</ul>
+					`,
+				},
+				{
+					name: "image",
+					html: `<img alt="website favicon" src="http://commonmark.org/help/images/favicon.png" />`,
+				},
+				{
+					name: "link",
+					html: `<a href="http://commonmark.org/">Link</a>`,
+				},
+				{
+					name: "link with title",
+					html: `<a href="http://commonmark.org/" title="Some Text">Link</a>`,
+				},
+				{
+					name: "reference link: full",
+					html: `
+		<a href="http://commonmark.org/first">First Link</a>
 
-<a href="http://commonmark.org/second">Second Link</a>
-`,
-			options: &Options{
-				LinkStyle:          "referenced",
-				LinkReferenceStyle: "full",
-			},
-		},
-		{
-			name: "reference link: collapsed",
-			html: `<a href="http://commonmark.org/">Link</a>`,
-			options: &Options{
-				LinkStyle:          "referenced",
-				LinkReferenceStyle: "collapsed",
-			},
-		},
-		{
-			name: "reference link: shortcut",
-			html: `<a href="http://commonmark.org/">Link</a>`,
-			options: &Options{
-				LinkStyle:          "referenced",
-				LinkReferenceStyle: "shortcut",
-			},
-		},
-		{
-			name: "escape strong",
-			html: `<p>**Not Strong**
-			**Still Not
-			Strong**</p>`,
-		},
-		{
-			name: "escape italic",
-			html: `<p>_Not Italic_</p>`,
-		},
-		{
-			name: "escape ordered list",
-			html: `<p>1. Not List 1. Not List
-			1. Not List</p>`,
-		},
-		{
-			name: "escape unordered list",
-			html: `<p>- Not List</p>`,
-		},
-		{
-			name: "pre tag",
-			html: `
-			<div>
-				<p>Who ate the most donuts this week?</p>
-				<pre><code class="language-foo+bar">Jeff  15
-Sam   11
-Robin  6</code></pre>
-			</div>
-			`,
-		},
-		{
-			name: "code tag",
-			html: `
-			<p>When <code>x = 3</code>, that means <code>x + 2 = 5</code></p>
-			`,
-		},
-		{
-			name: "code tag",
-			html: `
-			<code>last_30_days</code>
-			`,
-		},
-		{
-			name: "hr",
-			html: `
-			<p>Some Content</p>
-			<hr>
-			</p>Other Content</p>
-			`,
-		},
-		{
-			name: "blockquote",
-			html: `
-<blockquote>
-Some Quote
-Next Line
-</blockquote>
-			`,
-		},
-		{
-			name: "large blockquote",
-			html: `
-			<blockquote>
-				<p>Allowing an unimportant mistake to pass without comment is a wonderful social grace.</p>
-				<p>Ideological differences are no excuse for rudeness.</p>
-			</blockquote>
-			`,
-		},
+		<a href="http://commonmark.org/second">Second Link</a>
+		`,
+					options: &Options{
+						LinkStyle:          "referenced",
+						LinkReferenceStyle: "full",
+					},
+				},
+				{
+					name: "reference link: collapsed",
+					html: `<a href="http://commonmark.org/">Link</a>`,
+					options: &Options{
+						LinkStyle:          "referenced",
+						LinkReferenceStyle: "collapsed",
+					},
+				},
+				{
+					name: "reference link: shortcut",
+					html: `<a href="http://commonmark.org/">Link</a>`,
+					options: &Options{
+						LinkStyle:          "referenced",
+						LinkReferenceStyle: "shortcut",
+					},
+				},
+				{
+					name: "escape strong",
+					html: `<p>**Not Strong**
+					**Still Not
+					Strong**</p>`,
+				},
+				{
+					name: "escape italic",
+					html: `<p>_Not Italic_</p>`,
+				},
+				{
+					name: "escape ordered list",
+					html: `<p>1. Not List 1. Not List
+					1. Not List</p>`,
+				},
+				{
+					name: "escape unordered list",
+					html: `<p>- Not List</p>`,
+				},
+				{
+					name: "pre tag",
+					html: `
+					<div>
+						<p>Who ate the most donuts this week?</p>
+						<pre><code class="language-foo+bar">Jeff  15
+		Sam   11
+		Robin  6</code></pre>
+					</div>
+					`,
+				},
+				{
+					name: "code tag",
+					html: `
+					<p>When <code>x = 3</code>, that means <code>x + 2 = 5</code></p>
+					`,
+				},
+				{
+					name: "code tag",
+					html: `
+					<code>last_30_days</code>
+					`,
+				},
+				{
+					name: "hr",
+					html: `
+					<p>Some Content</p>
+					<hr>
+					</p>Other Content</p>
+					`,
+				},
+				{
+					name: "blockquote",
+					html: `
+		<blockquote>
+		Some Quote
+		Next Line
+		</blockquote>
+					`,
+				},
+				{
+					name: "large blockquote",
+					html: `
+					<blockquote>
+						<p>Allowing an unimportant mistake to pass without comment is a wonderful social grace.</p>
+						<p>Ideological differences are no excuse for rudeness.</p>
+					</blockquote>
+					`,
+				},
+		=======
+							`,
+						},
+						{
+							name: "list items ending with a space",
+							html: `
+				<ul>
+					<li>List items </li>
+					<li>Ending with </li>
+					<li>A space </li>
+				</ul>
+							`,
+						},
+						{
+							name: "sup element",
+							html: `
+							<p>One of the most common equations in all of physics is
+							<var>E</var>=<var>m</var><var>c</var><sup>2</sup>.<p>
+							`,
+						},
+						{
+							name: "sup element in list",
+							html: `
+							<p>The ordinal number "fifth" can be abbreviated in various languages as follows:</p>
+							<ul>
+								<li>English: 5<sup>th</sup></li>
+								<li>French: 5<sup>ème</sup></li>
+							</ul>
+							`,
+						},
+						{
+							name: "image",
+							html: `<img alt="website favicon" src="http://commonmark.org/help/images/favicon.png" />`,
+						},
+						{
+							name: "link",
+							html: `<a href="http://commonmark.org/">Link</a>`,
+						},
+						{
+							name: "link with title",
+							html: `<a href="http://commonmark.org/" title="Some Text">Link</a>`,
+						},
+						{
+							name: "reference link: full",
+							html: `
+				<a href="http://commonmark.org/first">First Link</a>
 
-		{
-			name: "turndown demo",
-			html: `
-			<h1>Turndown Demo</h1>
+				<a href="http://commonmark.org/second">Second Link</a>
+				`,
+							options: &Options{
+								LinkStyle:          "referenced",
+								LinkReferenceStyle: "full",
+							},
+						},
+						{
+							name: "reference link: collapsed",
+							html: `<a href="http://commonmark.org/">Link</a>`,
+							options: &Options{
+								LinkStyle:          "referenced",
+								LinkReferenceStyle: "collapsed",
+							},
+						},
+						{
+							name: "reference link: shortcut",
+							html: `<a href="http://commonmark.org/">Link</a>`,
+							options: &Options{
+								LinkStyle:          "referenced",
+								LinkReferenceStyle: "shortcut",
+							},
+						},
+						{
+							name: "escape strong",
+							html: `<p>**Not Strong**
+							**Still Not
+							Strong**</p>`,
+						},
+						{
+							name: "escape italic",
+							html: `<p>_Not Italic_</p>`,
+						},
+						{
+							name: "escape ordered list",
+							html: `<p>1. Not List 1. Not List
+							1. Not List</p>`,
+						},
+						{
+							name: "escape unordered list",
+							html: `<p>- Not List</p>`,
+						},
+						{
+							name: "pre tag",
+							html: `
+							<div>
+								<p>Who ate the most donuts this week?</p>
+								<pre><code class="language-foo+bar">Jeff  15
+				Sam   11
+				Robin  6</code></pre>
+							</div>
+							`,
+						},
+						{
+							name: "code tag",
+							html: `
+							<p>When <code>x = 3</code>, that means <code>x + 2 = 5</code></p>
+							`,
+						},
+						{
+							name: "hr",
+							html: `
+							<p>Some Content</p>
+							<hr>
+							</p>Other Content</p>
+							`,
+						},
+						{
+							name: "blockquote",
+							html: `
+				<blockquote>
+				Some Quote
+				Next Line
+				</blockquote>
+							`,
+						},
+						{
+							name: "large blockquote",
+							html: `
+							<blockquote>
+								<p>Allowing an unimportant mistake to pass without comment is a wonderful social grace.</p>
+								<p>Ideological differences are no excuse for rudeness.</p>
+							</blockquote>
+							`,
+						},*/
 
-			<p>This demonstrates <a href="https://github.com/domchristie/turndown">turndown</a> – an HTML to Markdown converter in JavaScript.</p>
+		/*{
+					name: "turndown demo",
+					html: `
+					<h1>Turndown Demo</h1>
 
-			<h2>Usage</h2>
+					<p>This demonstrates <a href="https://github.com/domchristie/turndown">turndown</a> – an HTML to Markdown converter in JavaScript.</p>
 
-			<pre><code class="language-js">var turndownService = new TurndownService()
-console.log(
-  turndownService.turndown('&lt;h1&gt;Hello world&lt;/h1&gt;')
-)</code></pre>
+					<h2>Usage</h2>
 
-			<hr />
+					<pre><code class="language-js">var turndownService = new TurndownService()
+		console.log(
+		  turndownService.turndown('&lt;h1&gt;Hello world&lt;/h1&gt;')
+		)</code></pre>
 
-			<p>It aims to be <a href="http://commonmark.org/">CommonMark</a>
-			 compliant, and includes options to style the output. These options include:</p>
+					<hr />
 
-			<ul>
-			  <li>headingStyle (setext or atx)</li>
-			  <li>horizontalRule (*, -, or _)</li>
-			  <li>bullet (*, -, or +)</li>
-			  <li>codeBlockStyle (indented or fenced)</li>
-			  <li>fence</li>
-			  <li>emDelimiter (_ or *)</li>
-			  <li>strongDelimiter (** or __)</li>
-			  <li>linkStyle (inlined or referenced)</li>
-			  <li>linkReferenceStyle (full, collapsed, or shortcut)</li>
-			</ul>
-						`,
-		},
-		{
+					<p>It aims to be <a href="http://commonmark.org/">CommonMark</a>
+					 compliant, and includes options to style the output. These options include:</p>
+
+					<ul>
+					  <li>headingStyle (setext or atx)</li>
+					  <li>horizontalRule (*, -, or _)</li>
+					  <li>bullet (*, -, or +)</li>
+					  <li>codeBlockStyle (indented or fenced)</li>
+					  <li>fence</li>
+					  <li>emDelimiter (_ or *)</li>
+					  <li>strongDelimiter (** or __)</li>
+					  <li>linkStyle (inlined or referenced)</li>
+					  <li>linkReferenceStyle (full, collapsed, or shortcut)</li>
+					</ul>
+								`,
+				},*/
+		/*{
 			name: "keep tag",
 			html: `<keep-tag><p>Content</p></keep-tag>`,
-		},
-		{
+		},*/
+		/*{
 			name: "remove tag",
 			html: `<remove-tag><p>Content</p></remove-tag>`,
-		},
+		},*/
 		{
 			/*
 				When a header (eg. <h3>) contains any new lines in its body, it will split the header contents
@@ -359,63 +490,72 @@ Newlines
 </h3>
 			`,
 		},
+		/*{
+					name: "text with whitespace",
+					html: `
+								<div id="sport_single_post-2" class="widget sport_single_post">
+					<h1 class="widget-title">Aktuelles</h1>
+
+					<!-- featured image -->
+					<div class="mosaic-block fade"><a href="http://www.bonnerruderverein.de/wp-content/uploads/2015/09/BRV-abend.jpg" class="mosaic-overlay fancybox" title="BRV-abend"></a><div class="mosaic-backdrop"><div class="corner-date">25 Mai</div><img src="http://www.bonnerruderverein.de/wp-content/uploads/2015/09/BRV-abend.jpg" alt="" /></div></div>
+					<!-- title -->
+					<h3 class="title"><a href="http://www.bonnerruderverein.de/bonner-nachtlauf/">9. Bonner Nachtlauf - Einschränkungen am Bootshaus</a></h3>
+
+		            <!-- excerpt -->
+		            am Mittwoch, dem 30. Mai 2018 findet am Bonner Rheinufer der 9. ...
+		            <a href="http://www.bonnerruderverein.de/bonner-nachtlauf/" class="more">More</a>
+
+
+
+					</div>
+
+					<hr />
+
+				<div>
+					<h1 class="widget-title">Aktuelles</h1>
+					<h3 class="title"><a href="some_url">Title</a></h3>
+
+								<!-- excerpt -->
+								Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Vestibulum id ligula porta felis euismod semper.
+								<a href="other_url" class="more">More</a>
+
+				</div>
+		`,
+				},*/
+		/*{
+					name: "pre tag without code tag",
+					html: `
+		<div class="code"><pre>// Fprint formats using the default formats for its operands and writes to w.
+		// Spaces are added between operands when neither is a string.
+		// It returns the number of bytes written and any write error encountered.
+		func Fprint(w io.Writer, a ...interface{}) (n int, err error) {</pre></div>
+		`,
+				},*/
 		{
-			name: "text with whitespace",
+			name: "anomaly",
 			html: `
-						<div id="sport_single_post-2" class="widget sport_single_post">
-			<h1 class="widget-title">Aktuelles</h1>
-			
-			<!-- featured image -->
-			<div class="mosaic-block fade"><a href="http://www.bonnerruderverein.de/wp-content/uploads/2015/09/BRV-abend.jpg" class="mosaic-overlay fancybox" title="BRV-abend"></a><div class="mosaic-backdrop"><div class="corner-date">25 Mai</div><img src="http://www.bonnerruderverein.de/wp-content/uploads/2015/09/BRV-abend.jpg" alt="" /></div></div>
-			<!-- title -->
-			<h3 class="title"><a href="http://www.bonnerruderverein.de/bonner-nachtlauf/">9. Bonner Nachtlauf - Einschränkungen am Bootshaus</a></h3>
-
-            <!-- excerpt -->
-            am Mittwoch, dem 30. Mai 2018 findet am Bonner Rheinufer der 9. ...
-            <a href="http://www.bonnerruderverein.de/bonner-nachtlauf/" class="more">More</a>
-
-
-
-			</div>
-
-			<hr />
-			
-		<div>
-			<h1 class="widget-title">Aktuelles</h1>
-			<h3 class="title"><a href="some_url">Title</a></h3>
-
-						<!-- excerpt -->
-						Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Vestibulum id ligula porta felis euismod semper.
-						<a href="other_url" class="more">More</a>
-
-		</div>
+<p>Tes yang ada angkanya ya\n1. Coba pesan urutan\n2. Coba pesan dengan angka\n3. Coba pesan terus</p>\n\n<p>Tes yang ada bulletnya ya\n• Mengurangi kontak fisik\n• Hemat dan Sederhana\n• Mendukung pembayaran nontunai</p>\n
 `,
+			options: &Options{PreSanitize: true},
 		},
-		{
-			name: "pre tag without code tag",
-			html: `
-<div class="code"><pre>// Fprint formats using the default formats for its operands and writes to w.
-// Spaces are added between operands when neither is a string.
-// It returns the number of bytes written and any write error encountered.
-func Fprint(w io.Writer, a ...interface{}) (n int, err error) {</pre></div>
-`,
-		},
-		{
-			name: "escape pipe characters because of the use in tables",
-			html: `<p>With | Character<p>`,
-		},
-		{
-			name: "<br> adds new line break",
-			html: `<p>1. xxx <br/>2. xxxx<br/>3. xxx</p><p><span class="img-wrap"><img src="xxx"></span><br>4. golang<br>a. xx<br>b. xx</p>`,
-		},
-		{
-			name: "<br> does not add new line inside header",
-			html: `<h1>Heading<br/> <br/>One</h1>`,
-		},
-		{
-			name: "dont escape too much",
-			html: `jmap –histo[:live]`,
-		},
+		/*
+			{
+				name: "escape pipe characters because of the use in tables",
+				html: `<p>With | Character<p>`,
+			},
+			{
+				name: "<br> adds new line break",
+				html: `<p>1. xxx <br/>2. xxxx<br/>3. xxx</p><p><span class="img-wrap"><img src="xxx"></span><br>4. golang<br>a. xx<br>b. xx</p>`,
+			},
+			{
+				name: "<br> does not add new line inside header",
+				html: `<h1>Heading<br/> <br/>One</h1>`,
+			},
+			{
+				name: "dont escape too much",
+				html: `jmap –histo[:live]`,
+			},
+		*/
 		/*
 					{ // TODO: not working yet
 						name: "p tag with lots of whitespace",

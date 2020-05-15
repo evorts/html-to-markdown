@@ -108,7 +108,6 @@ func NewConverter(domain string, enableCommonmark bool, options *Options) *Conve
 		keep:   make(map[string]struct{}),
 		remove: make(map[string]struct{}),
 	}
-
 	if enableCommonmark {
 		c.AddRules(commonmark...)
 		c.remove["script"] = struct{}{}
@@ -323,6 +322,7 @@ func (c *Converter) ConvertResponse(res *http.Response) (string, error) {
 
 func (c *Converter) Sanitize(html string) string {
 	html = strings.ReplaceAll(html, "\n", "<br/>")
+	html = strings.ReplaceAll(html, "\\n", "<br/>")
 	return html
 }
 
